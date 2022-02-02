@@ -7,6 +7,15 @@ public class GeneticAlgorithm {
     public static ArrayList<Item> readData(String filename) throws FileNotFoundException {
         // Reads in a data file with the format shown below and creates and returns an
         // ArrayList of Item objects.
+
+        // Example from class
+        // String line = "thing, 3.3, 100";
+        // String[] tokens = line.split(", ");
+        // System.out.println(tokens[0])
+        // System.out.println(tokens[1])
+        // double weight = Double.parseDouble(tokens[1]);
+        // System.out.println(tokens[2])
+
         File f = new File(filename);
         Scanner sc = new Scanner(f);
         sc.useDelimiter("\\n");
