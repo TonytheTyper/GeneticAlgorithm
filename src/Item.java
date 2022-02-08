@@ -40,10 +40,11 @@ public class Item {
     public void setIncluded(boolean included) {
         // Setter for the item’s included field (you don’t need setters for the other
         // fields)
+        this.included = included;
     }
 
     public String toString() {
         // Displays the item in the form <name> (<weight> lbs, $<value>)
-        return name + ("<" + weight + ">" + " lbs, " + "$" + "<" + value + ">");
+        return name + (", " + weight + " lbs, " + "$" + value);
     }
 }

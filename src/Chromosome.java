@@ -12,6 +12,10 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
     public Chromosome(ArrayList<Item> items) {
         // Adds a copy of each of the items passed in to this Chromosome. Uses a random
         // number to decide whether each item's included field is set to true or false.
+        for (int i = 0; i < items.size(); i++) {
+            Item anItem = new Item(items.get(i));
+            System.out.println(anItem);
+        }
     }
 
     public Chromosome crossover(Chromosome other) {
@@ -33,6 +37,7 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         // Returns the fitness of this chromosome. If the sum of all of the included
         // items' weight are greater than 10, the fitness is zero. Otherwise, the
         // fitness is equal to the sum of all of the included items' values.
+        int fitness = 0;
         return fitness;
     }
 
@@ -40,10 +45,20 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         // returns -1 if THIS chromosome's fitness is greater than the OTHER's fitness,
         // +1 if THIS chromosome's fitness is less than the OTHER one's, and 0 if their
         // fitness is the same.
+        // EXAMPLE:
+        if (other.getFitness() == this.getFitness()) {
+            return 0;
+        } else if (other.getFitness() > this.getFitness()) {
+            return 1;
+        } else {
+            return -1;
+        }
     }
 
     public String toString() {
         // Displays the name, weight, and value of all items in this chromosome whose
         // included value is true, followed by the fitness of this chromosome.
+        return "New Item";
+
     }
 }
