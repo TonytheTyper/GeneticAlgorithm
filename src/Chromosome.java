@@ -12,25 +12,35 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
     public Chromosome(ArrayList<Item> items) {
         // Adds a copy of each of the items passed in to this Chromosome. Uses a random
         // number to decide whether each item's included field is set to true or false.
+        rng = new Random();
+        Item anItem;
+        int trueOrFalse;
         for (int i = 0; i < items.size(); i++) {
-            Item anItem = new Item(items.get(i));
-            System.out.println(anItem);
+            trueOrFalse = rng.nextInt(items.size()); // changing random number each iteration
+            anItem = new Item(items.get(i));
+            if (trueOrFalse > (items.size() / 2)) {
+                anItem.setIncluded(true);
+            } else {
+                anItem.setIncluded(false);
+            }
         }
     }
 
     public Chromosome crossover(Chromosome other) {
-        return other;
         // Creates and returns a new child chromosome by performing the crossover
         // operation on THIS chromosome and the OTHER one that is passed in (i.e. for
         // each item, use a random number to decide which parent's item should be copied
         // and added to the child).
-
+        rng = new Random();
+        return other;
     }
 
     public void mutate() {
         // performs the mutation operation on this chromosome (i.e. for each item in
         // this chromosome, use a random number to decide whether or not to flip it's
         // included field from true to false or vice versa)
+        rng = new Random();
+        System.out.println(this.getClass());
     }
 
     public int getFitness() {
@@ -58,7 +68,13 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
     public String toString() {
         // Displays the name, weight, and value of all items in this chromosome whose
         // included value is true, followed by the fitness of this chromosome.
-        return "New Item";
-
+        Item item;
+        for (int i = 0; i < this.size(); i++) {
+            item = new Item(this.get(i));
+            if (item.isIncluded()) {
+                return "Included!";
+            }
+        }
+        return "def no";
     }
 }

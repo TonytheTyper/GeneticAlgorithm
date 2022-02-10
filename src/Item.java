@@ -11,7 +11,7 @@ public class Item {
 
     public Item(String name, double weight, int value) {
         // Initializes the Item’s =ields to the values that are passed in; the included
-        // =ield is initialized to false
+        // field is initialized to false
         this.name = name;
         this.weight = weight;
         this.value = value;
