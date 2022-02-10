@@ -15,6 +15,7 @@ public class Item {
         this.name = name;
         this.weight = weight;
         this.value = value;
+        this.included = false;
     }
 
     public Item(Item other) {
@@ -22,6 +23,7 @@ public class Item {
         this.name = other.name;
         this.weight = other.weight;
         this.value = other.value;
+        this.included = other.included;
     }
 
     public double getWeight() {

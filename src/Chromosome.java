@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome> {
-    private static Random rng;
     // used for random number generation
+    private static Random rng;
 
     public Chromosome() {
         // No arg constructor
@@ -18,11 +18,15 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         for (int i = 0; i < items.size(); i++) {
             trueOrFalse = rng.nextInt(items.size()); // changing random number each iteration
             anItem = new Item(items.get(i));
-            if (trueOrFalse > (items.size() / 2)) {
+            if (trueOrFalse > (items.size() / 2)) { // Setting isIncluded based on randomly being above or below the
+                                                    // midpoint of items ArrayList
                 anItem.setIncluded(true);
             } else {
                 anItem.setIncluded(false);
             }
+            add(anItem);
+            // System.out.println(anItem);
+            // System.out.println(anItem.isIncluded());
         }
     }
 
@@ -32,7 +36,19 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         // each item, use a random number to decide which parent's item should be copied
         // and added to the child).
         rng = new Random();
-        return other;
+        int copyOtherOrThis = rng.nextInt(other.size());
+        Chromosome child;
+        if (copyOtherOrThis > (other.size() / 2)) {
+            // Child has the other takes from the other Chromosome
+            child = new Chromosome(other);
+            // System.out.println("Other Child");
+        } else {
+            // Child has the other takes from this Chromosome
+            child = new Chromosome(this);
+            // System.out.println("This Child");
+        }
+
+        return child;
     }
 
     public void mutate() {
@@ -40,7 +56,7 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         // this chromosome, use a random number to decide whether or not to flip it's
         // included field from true to false or vice versa)
         rng = new Random();
-        System.out.println(this.getClass());
+
     }
 
     public int getFitness() {
@@ -72,9 +88,9 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         for (int i = 0; i < this.size(); i++) {
             item = new Item(this.get(i));
             if (item.isIncluded()) {
-                return "Included!";
+                return /* "toString " + */ item.toString();
             }
         }
-        return "def no";
+        return "Not included";
     }
 }

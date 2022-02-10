@@ -21,8 +21,9 @@ public class GeneticAlgorithm {
             int value = Integer.parseInt(tokens[2]);
             Item thisItem = new Item(name, weight, value);
             items.add(thisItem);
-            System.out.println(thisItem);
+            // System.out.println("Initial items added from file: " + thisItem);
         }
+        sc.close();
         return items;
     }
 
@@ -35,7 +36,7 @@ public class GeneticAlgorithm {
             Chromosome thisChromosome = new Chromosome(items);
             arrayListChromosomes.add(thisChromosome);
         }
-        System.out.println(arrayListChromosomes);
+        // System.out.println(arrayListChromosomes);
         return arrayListChromosomes;
     }
 
@@ -44,11 +45,19 @@ public class GeneticAlgorithm {
         // the steps described in the RUNNING THE GENETIC ALGORITHM section of the
         // project pdf.
         ArrayList<Chromosome> arrayListChromosomes = new ArrayList<Chromosome>();
+        // Reads the data and initializes the population in an ArrayList<Chromosome>,
+        // Also catches FileNotFoundException
         try {
             arrayListChromosomes = initializePopulation(readData("items.txt"), 10);
         } catch (FileNotFoundException e) {
             System.out.println("Error: file is not in directory");
         }
-        arrayListChromosomes.get(0).mutate();
+        // Creating next generation of Chromosomes
+        ArrayList<Chromosome> nextGenChromosomes = new ArrayList<Chromosome>(30);
+        // Adding current population to the next generation
+        nextGenChromosomes = arrayListChromosomes;
+        for (int i = 0; i < nextGenChromosomes.size(); i++) {
+            nextGenChromosomes.get(i).crossover(nextGenChromosomes.get(i));
+        }
     }
 }
