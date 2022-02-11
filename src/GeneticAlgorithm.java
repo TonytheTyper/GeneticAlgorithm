@@ -55,9 +55,20 @@ public class GeneticAlgorithm {
         // Creating next generation of Chromosomes
         ArrayList<Chromosome> nextGenChromosomes = new ArrayList<Chromosome>(30);
         // Adding current population to the next generation
-        nextGenChromosomes = arrayListChromosomes;
-        for (int i = 0; i < nextGenChromosomes.size(); i++) {
-            nextGenChromosomes.get(i).crossover(nextGenChromosomes.get(i));
+        for (int i = 0; i < arrayListChromosomes.size(); i++) {
+            nextGenChromosomes.add(arrayListChromosomes.get(i));
         }
+        // System.out.println(arrayListChromosomes);
+        Chromosome child;
+        for (int i = 0; i < arrayListChromosomes.size(); i++) {
+            // randomly choosing individuals in each generation
+            double randomNextGen = Math.random() * (nextGenChromosomes.size() - 1);
+            double randomCurrentGen = Math.random() * (arrayListChromosomes.size() - 1);
+            int CurrentGen = (int) Math.round(randomCurrentGen);
+            int NextGen = (int) Math.round(randomNextGen);
+            child = new Chromosome(nextGenChromosomes.get(NextGen).crossover(arrayListChromosomes.get(CurrentGen)));
+            nextGenChromosomes.add(child);
+        }
+        // System.out.println(nextGenChromosomes);
     }
 }

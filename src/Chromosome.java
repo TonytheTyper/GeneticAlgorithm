@@ -36,18 +36,20 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         // each item, use a random number to decide which parent's item should be copied
         // and added to the child).
         rng = new Random();
-        int copyOtherOrThis = rng.nextInt(other.size());
+        int copyThisOrOther = rng.nextInt(other.size());
         Chromosome child;
-        if (copyOtherOrThis > (other.size() / 2)) {
+        if (copyThisOrOther > (other.size() / 2)) {
             // Child has the other takes from the other Chromosome
             child = new Chromosome(other);
-            // System.out.println("Other Child");
+            // System.out.println("The other child was taken: " + child + ". This child was
+            // not: " + this);
         } else {
             // Child has the other takes from this Chromosome
             child = new Chromosome(this);
-            // System.out.println("This Child");
+            // System.out.println("This child was taken: " + child + ". The other was not: "
+            // + other);
         }
-
+        // System.out.println("Returning child: " + child);
         return child;
     }
 
@@ -56,7 +58,19 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         // this chromosome, use a random number to decide whether or not to flip it's
         // included field from true to false or vice versa)
         rng = new Random();
-
+        Chromosome mutatingChromosome = new Chromosome(this);
+        int flip = rng.nextInt(this.size());
+        // for each item in the mutating chromosome
+        for (Item item : mutatingChromosome) {
+            // randomly flipping the isIncluded field
+            if (flip > (this.size() / 2)) {
+                if (item.isIncluded()) {// if it is included
+                    item.setIncluded(false);// flip to false
+                } else {// if it wasn't included
+                    item.setIncluded(true);// flip to true
+                }
+            }
+        }
     }
 
     public int getFitness() {
