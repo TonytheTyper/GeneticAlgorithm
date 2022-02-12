@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class GeneticAlgorithm {
@@ -21,7 +22,6 @@ public class GeneticAlgorithm {
             int value = Integer.parseInt(tokens[2]);
             Item thisItem = new Item(name, weight, value);
             items.add(thisItem);
-            // System.out.println("Initial items added from file: " + thisItem);
         }
         sc.close();
         return items;
@@ -36,7 +36,6 @@ public class GeneticAlgorithm {
             Chromosome thisChromosome = new Chromosome(items);
             arrayListChromosomes.add(thisChromosome);
         }
-        // System.out.println(arrayListChromosomes);
         return arrayListChromosomes;
     }
 
@@ -58,7 +57,6 @@ public class GeneticAlgorithm {
         for (int i = 0; i < arrayListChromosomes.size(); i++) {
             nextGenChromosomes.add(arrayListChromosomes.get(i));
         }
-        // System.out.println(arrayListChromosomes);
         Chromosome child;
         for (int i = 0; i < arrayListChromosomes.size(); i++) {
             // randomly choosing individuals in each generation
@@ -69,6 +67,17 @@ public class GeneticAlgorithm {
             child = new Chromosome(nextGenChromosomes.get(NextGen).crossover(arrayListChromosomes.get(CurrentGen)));
             nextGenChromosomes.add(child);
         }
-        // System.out.println(nextGenChromosomes);
+        // Mutating 10% of population
+        double randomMutation = Math.random() * (nextGenChromosomes.size() - 1);
+        int nextGenMutation = (int) Math.round(randomMutation);
+        for (int i = 0; i < (nextGenChromosomes.size() * 0.1); i++) {
+            nextGenChromosomes.get(nextGenMutation).mutate();
+        }
+        // Sorting Chromosomes according to fitness
+        Collections.sort(nextGenChromosomes);
+        for (Chromosome c : nextGenChromosomes) {
+            System.out.println(c);
+        }
+
     }
 }

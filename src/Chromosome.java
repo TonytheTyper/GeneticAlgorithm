@@ -54,12 +54,13 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
     }
 
     public void mutate() {
-        // performs the mutation operation on this chromosome (i.e. for each item in
+        // Performs the mutation operation on this chromosome (i.e. for each item in
         // this chromosome, use a random number to decide whether or not to flip it's
         // included field from true to false or vice versa)
         rng = new Random();
         Chromosome mutatingChromosome = new Chromosome(this);
         int flip = rng.nextInt(this.size());
+
         // for each item in the mutating chromosome
         for (Item item : mutatingChromosome) {
             // randomly flipping the isIncluded field
@@ -77,7 +78,20 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         // Returns the fitness of this chromosome. If the sum of all of the included
         // items' weight are greater than 10, the fitness is zero. Otherwise, the
         // fitness is equal to the sum of all of the included items' values.
-        int fitness = 0;
+        double doubleFitness = 0;
+        Chromosome fitnessChromosome = new Chromosome(this);
+        // Checking each item's fitness in the Chromosome that calls this method
+        for (Item item : fitnessChromosome) {
+            // making sure the item isIncluded
+            if (item.isIncluded()) {
+                doubleFitness += item.getWeight();
+            }
+        }
+        // If fitness is greater than 10 its fitness is set to zero
+        if (doubleFitness > 10.0) {
+            doubleFitness = 0;
+        }
+        int fitness = (int) Math.round(doubleFitness);
         return fitness;
     }
 
@@ -85,26 +99,32 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         // returns -1 if THIS chromosome's fitness is greater than the OTHER's fitness,
         // +1 if THIS chromosome's fitness is less than the OTHER one's, and 0 if their
         // fitness is the same.
-        // EXAMPLE:
-        if (other.getFitness() == this.getFitness()) {
-            return 0;
-        } else if (other.getFitness() > this.getFitness()) {
+        if (this.getFitness() > other.getFitness()) {
+            return -1;
+        } else if (this.getFitness() < other.getFitness()) {
             return 1;
         } else {
-            return -1;
+            return 0;
         }
     }
 
     public String toString() {
         // Displays the name, weight, and value of all items in this chromosome whose
         // included value is true, followed by the fitness of this chromosome.
-        Item item;
-        for (int i = 0; i < this.size(); i++) {
-            item = new Item(this.get(i));
+        String allTheIncludedItems = "This Chromosome has these items: ";
+        for (Item item : this) {
             if (item.isIncluded()) {
-                return /* "toString " + */ item.toString();
+                allTheIncludedItems += item.toString() + " ";
             }
         }
-        return "Not included";
+        allTheIncludedItems += "\nThis Chromosome's fitness: " + this.getFitness() + "\n";
+        // Item item;
+        // for (int i = 0; i < this.size(); i++) {
+        // item = new Item(this.get(i));
+        // if (item.isIncluded()) {
+        // return /* "toString " + */ item.toString();
+        // }
+        // }
+        return allTheIncludedItems;
     }
 }
