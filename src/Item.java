@@ -10,7 +10,7 @@ public class Item {
     // Indicates whether the item should be taken or not
 
     public Item(String name, double weight, int value) {
-        // Initializes the Item’s =ields to the values that are passed in; the included
+        // Initializes the Item’s fields to the values that are passed in; the included
         // field is initialized to false
         this.name = name;
         this.weight = weight;
@@ -27,16 +27,16 @@ public class Item {
     }
 
     public double getWeight() {
-        return weight;
+        return this.weight;
     }
 
     public int getValue() {
-        return value;
+        return this.value;
     }
 
     public boolean isIncluded() {
         // Getter for the item’s fields (you don’t need a getter for the name)
-        return included;
+        return this.included;
     }
 
     public void setIncluded(boolean included) {

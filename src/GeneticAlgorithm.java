@@ -6,11 +6,11 @@ import java.util.Scanner;
 
 public class GeneticAlgorithm {
 
-    static ArrayList<Item> items = new ArrayList<Item>();
-
     public static ArrayList<Item> readData(String filename) throws FileNotFoundException {
         // Reads in a data file with the format shown below and creates and returns an
         // ArrayList of Item objects.
+
+        ArrayList<Item> items = new ArrayList<>();
 
         File file = new File(filename);
         Scanner sc = new Scanner(file);
@@ -31,7 +31,7 @@ public class GeneticAlgorithm {
         // Creates and returns an ArrayList of populationSize Chromosome objects that
         // each contain the items, with their included field randomly set to true or
         // false.
-        ArrayList<Chromosome> arrayListChromosomes = new ArrayList<Chromosome>(populationSize);
+        ArrayList<Chromosome> arrayListChromosomes = new ArrayList<>();
         for (int i = 0; i < populationSize; i++) {
             Chromosome thisChromosome = new Chromosome(items);
             arrayListChromosomes.add(thisChromosome);
@@ -43,41 +43,44 @@ public class GeneticAlgorithm {
         // Reads the data about the items in from a file called items.txt and performs
         // the steps described in the RUNNING THE GENETIC ALGORITHM section of the
         // project pdf.
-        ArrayList<Chromosome> arrayListChromosomes = new ArrayList<Chromosome>();
+        ArrayList<Chromosome> arrayListChromosomes = new ArrayList<>();
         // Reads the data and initializes the population in an ArrayList<Chromosome>,
         // Also catches FileNotFoundException
         try {
-            arrayListChromosomes = initializePopulation(readData("items.txt"), 10);
+            arrayListChromosomes = initializePopulation(readData("more_items.txt"), 100);
         } catch (FileNotFoundException e) {
             System.out.println("Error: file is not in directory");
         }
-        // Creating next generation of Chromosomes
-        ArrayList<Chromosome> nextGenChromosomes = new ArrayList<Chromosome>(30);
-        // Adding current population to the next generation
-        for (int i = 0; i < arrayListChromosomes.size(); i++) {
-            nextGenChromosomes.add(arrayListChromosomes.get(i));
+        for (int j = 0; j < 5000; j++) {
+            // Creating next generation of Chromosomes
+            ArrayList<Chromosome> nextGenChromosomes = new ArrayList<>();
+            // Adding current population to the next generation
+            for (int i = 0; i < arrayListChromosomes.size(); i++) {
+                nextGenChromosomes.add(arrayListChromosomes.get(i));
+            }
+            Collections.shuffle(nextGenChromosomes);
+            int size = arrayListChromosomes.size();
+            for (int i = 0; i < size; i += 2) {
+                Chromosome child = new Chromosome();
+                // randomly choosing individuals in each generation
+                child = nextGenChromosomes.get(i).crossover(nextGenChromosomes.get(i + 1));
+                nextGenChromosomes.add(child);
+            }
+            // Mutating 10% of population
+            Collections.shuffle(nextGenChromosomes);
+            for (int i = 0; i < (nextGenChromosomes.size() * 0.1); i++) {
+                nextGenChromosomes.get(i).mutate();
+            }
+            // Sorting Chromosomes according to fitness
+            Collections.sort(nextGenChromosomes);
+            // Clearing out current generation
+            arrayListChromosomes.clear();
+            // Adding top 10 of the next generation to the current generation
+            for (int i = 0; i < 10; i++) {
+                arrayListChromosomes.add(nextGenChromosomes.get(i));
+            }
         }
-        Chromosome child;
-        for (int i = 0; i < arrayListChromosomes.size(); i++) {
-            // randomly choosing individuals in each generation
-            double randomNextGen = Math.random() * (nextGenChromosomes.size() - 1);
-            double randomCurrentGen = Math.random() * (arrayListChromosomes.size() - 1);
-            int CurrentGen = (int) Math.round(randomCurrentGen);
-            int NextGen = (int) Math.round(randomNextGen);
-            child = new Chromosome(nextGenChromosomes.get(NextGen).crossover(arrayListChromosomes.get(CurrentGen)));
-            nextGenChromosomes.add(child);
-        }
-        // Mutating 10% of population
-        double randomMutation = Math.random() * (nextGenChromosomes.size() - 1);
-        int nextGenMutation = (int) Math.round(randomMutation);
-        for (int i = 0; i < (nextGenChromosomes.size() * 0.1); i++) {
-            nextGenChromosomes.get(nextGenMutation).mutate();
-        }
-        // Sorting Chromosomes according to fitness
-        Collections.sort(nextGenChromosomes);
-        for (Chromosome c : nextGenChromosomes) {
-            System.out.println(c);
-        }
-
+        Collections.sort(arrayListChromosomes);
+        System.out.println(arrayListChromosomes.get(0));
     }
 }
