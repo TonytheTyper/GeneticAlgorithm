@@ -80,6 +80,7 @@ public class GeneticAlgorithm {
                 arrayListChromosomes.add(nextGenChromosomes.get(i));
             }
         }
+        // Printing fittest individual
         Collections.sort(arrayListChromosomes);
         System.out.println(arrayListChromosomes.get(0));
     }

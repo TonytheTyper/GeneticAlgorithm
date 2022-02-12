@@ -18,8 +18,7 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         for (int i = 0; i < items.size(); i++) {
             trueOrFalse = rng.nextInt(10) + 1; // changing random number each iteration
             Item anItem = new Item(items.get(i));
-            if (trueOrFalse == 1) { // Setting isIncluded based on randomly being above or below the
-                                    // midpoint of items ArrayList
+            if (trueOrFalse == 1) { // Setting isIncluded based on random integer
                 anItem.setIncluded(true);
             } else {
                 anItem.setIncluded(false);
@@ -37,11 +36,11 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         Chromosome child = new Chromosome();
         for (int i = 0; i < other.size(); i++) {
             int copyThisOrOther = rng.nextInt(10) + 1;
-            if (copyThisOrOther >= 6) {
-                // Child has the other takes from the other Chromosome
+            if (copyThisOrOther >= 6) { // randomly chooses which parent to take from
+                // Child takes from the other Chromosome
                 child.add(new Item(other.get(i)));
             } else {
-                // Child has the other takes from this Chromosome
+                // Child takes from this Chromosome
                 child.add(new Item(this.get(i)));
             }
         }
@@ -58,7 +57,7 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
             int flip = rng.nextInt(10) + 1;
             // randomly flipping the isIncluded field
             if (flip == 1) {
-                item.setIncluded(!item.isIncluded());
+                item.setIncluded(!item.isIncluded());// sets included to the opposite of what it was
             }
         }
     }
@@ -81,7 +80,7 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         if (doubleFitness > 10.0) {
             return 0;
         }
-        return totalValue;
+        return totalValue; // printing out value of the chromosome
     }
 
     public int compareTo(Chromosome other) {
