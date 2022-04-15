@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class GeneticAlgorithm {
+    public static final int POP_SIZE = 100;
+    public static final int NUM_EPOCHS = 1000;
+    public static final int NUM_THREADS = 4;
 
     public static ArrayList<Item> readData(String filename) throws FileNotFoundException {
         // Reads in a data file with the format shown below and creates and returns an
@@ -39,7 +42,9 @@ public class GeneticAlgorithm {
         return arrayListChromosomes;
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, InterruptedException {
+
+        long start = System.currentTimeMillis();
         // Reads the data about the items in from a file called items.txt and performs
         // the steps described in the RUNNING THE GENETIC ALGORITHM section of the
         // project pdf.
@@ -47,41 +52,36 @@ public class GeneticAlgorithm {
         // Reads the data and initializes the population in an ArrayList<Chromosome>,
         // Also catches FileNotFoundException
         try {
-            arrayListChromosomes = initializePopulation(readData("more_items.txt"), 100);
+            arrayListChromosomes = initializePopulation(readData("more_items.txt"), POP_SIZE);
         } catch (FileNotFoundException e) {
             System.out.println("Error: file is not in directory");
         }
-        for (int j = 0; j < 5000; j++) {
-            // Creating next generation of Chromosomes
-            ArrayList<Chromosome> nextGenChromosomes = new ArrayList<>();
-            // Adding current population to the next generation
-            for (int i = 0; i < arrayListChromosomes.size(); i++) {
-                nextGenChromosomes.add(arrayListChromosomes.get(i));
-            }
-            Collections.shuffle(nextGenChromosomes);
-            int size = arrayListChromosomes.size();
-            for (int i = 0; i < size; i += 2) {
-                Chromosome child = new Chromosome();
-                // randomly choosing individuals in each generation
-                child = nextGenChromosomes.get(i).crossover(nextGenChromosomes.get(i + 1));
-                nextGenChromosomes.add(child);
-            }
-            // Mutating 10% of population
-            Collections.shuffle(nextGenChromosomes);
-            for (int i = 0; i < (nextGenChromosomes.size() * 0.1); i++) {
-                nextGenChromosomes.get(i).mutate();
-            }
-            // Sorting Chromosomes according to fitness
-            Collections.sort(nextGenChromosomes);
-            // Clearing out current generation
-            arrayListChromosomes.clear();
-            // Adding top 10 of the next generation to the current generation
-            for (int i = 0; i < 10; i++) {
-                arrayListChromosomes.add(nextGenChromosomes.get(i));
+        // System.out.println(arrayListChromosomes);
+        // Creating threads
+        geneticThread[] threads = new geneticThread[NUM_THREADS];
+        for (int i = 0; i < NUM_THREADS; i++) {
+            threads[i] = new geneticThread(arrayListChromosomes);
+            // System.out.println(arrayListChromosomes);
+            threads[i].start();
+        }
+
+        // Joining Threads
+        for (int i = 0; i < NUM_THREADS; i++) {
+            threads[i].join();
+        }
+
+        // Printing fittest individual
+        Chromosome fittestChromosome = new Chromosome();
+        for (int i = 0; i < threads.length; i++) {
+            Collections.sort(threads[i].getChromosomes());
+            if (threads[i].getChromosomes().get(0).getFitness() > fittestChromosome.getFitness()) {
+                fittestChromosome = threads[i].getChromosomes().get(0);
             }
         }
-        // Printing fittest individual
-        Collections.sort(arrayListChromosomes);
-        System.out.println(arrayListChromosomes.get(0));
+        System.out.println(fittestChromosome);
+
+        // Printing out time it took to run the threads
+        long end = System.currentTimeMillis();
+        System.out.println(end - start + " milliseconds");
     }
 }

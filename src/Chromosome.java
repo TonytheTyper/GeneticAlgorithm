@@ -4,6 +4,7 @@ import java.util.Random;
 public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome> {
     // used for random number generation
     private static Random rng;
+    public static long dummy = 0;
 
     public Chromosome() {
         // No arg constructor
@@ -25,6 +26,15 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
             }
             this.add(anItem);
         }
+    }
+
+    public Chromosome copy() {
+        Chromosome newChromosome = new Chromosome();
+        for (Item i : this) {
+            Item newItem = new Item(i);
+            newChromosome.add(newItem);
+        }
+        return newChromosome;
     }
 
     public Chromosome crossover(Chromosome other) {
@@ -63,6 +73,10 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
     }
 
     public int getFitness() {
+        dummy = 0;
+        for (int i = 0; i < this.size() * 1000; i++) {
+            dummy += i;
+        }
         // Returns the fitness of this chromosome. If the sum of all of the included
         // items' weight are greater than 10, the fitness is zero. Otherwise, the
         // fitness is equal to the sum of all of the included items' values.
