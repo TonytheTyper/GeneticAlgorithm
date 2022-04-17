@@ -28,6 +28,7 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
         }
     }
 
+    // copy method for multiple thread implementation
     public Chromosome copy() {
         Chromosome newChromosome = new Chromosome();
         for (Item i : this) {

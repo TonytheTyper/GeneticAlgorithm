@@ -7,7 +7,22 @@ import java.util.Scanner;
 public class GeneticAlgorithm {
     public static final int POP_SIZE = 100;
     public static final int NUM_EPOCHS = 1000;
-    public static final int NUM_THREADS = 4;
+    public static final int NUM_THREADS = 1;
+    // 6 Threads:
+    // Average fitness between 7400-7600
+    // Average time between 800-1000ms
+
+    // 4 Threads:
+    // Average fitness between 7400-7600
+    // Average time between 800-1000ms
+
+    // 2 Threads:
+    // Average fitness between 7400-7600
+    // Average time between 1150-1400ms
+
+    // 1 Thread:
+    // Average fitness between 7400-7600
+    // Average time between 2000-2200ms
 
     public static ArrayList<Item> readData(String filename) throws FileNotFoundException {
         // Reads in a data file with the format shown below and creates and returns an
@@ -56,12 +71,11 @@ public class GeneticAlgorithm {
         } catch (FileNotFoundException e) {
             System.out.println("Error: file is not in directory");
         }
-        // System.out.println(arrayListChromosomes);
+
         // Creating threads
         geneticThread[] threads = new geneticThread[NUM_THREADS];
         for (int i = 0; i < NUM_THREADS; i++) {
             threads[i] = new geneticThread(arrayListChromosomes);
-            // System.out.println(arrayListChromosomes);
             threads[i].start();
         }
 

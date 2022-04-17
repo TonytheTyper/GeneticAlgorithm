@@ -6,6 +6,9 @@ public class geneticThread extends Thread {
 
     public geneticThread(ArrayList<Chromosome> c) {
         chromosomes = new ArrayList<>();
+        // Copying the the arraylist of chromosomes because for some reason
+        // multiple threads didn't play nice with just passing the original
+        // arraylist through it.
         for (int i = 0; i < c.size(); i++) {
             chromosomes.add(c.get(i).copy());
         }
@@ -42,6 +45,7 @@ public class geneticThread extends Thread {
         }
     }
 
+    // getter method for retrieving each threads best fit chromosome
     public ArrayList<Chromosome> getChromosomes() {
         return chromosomes;
     }

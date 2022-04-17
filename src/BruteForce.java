@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class BruteForce {
     public static ArrayList<Item> getOptimalSet(ArrayList<Item> items) throws InvalidArgumentException {
 
+        // Making sure the size of items passed in doesn't exceed 10
         if (items.size() > 10) {
             throw new InvalidArgumentException();
         } else {
@@ -18,18 +19,25 @@ public class BruteForce {
             ArrayList<Item> bestSet = new ArrayList<>();
             // Recursive Step
             for (int i = 0; i < items.size(); i++) {
+                // Copying the arraylist so that you can remove an item while looping
+                // through items
                 ArrayList<Item> copyItems = new ArrayList<>();
                 for (Item item : items) {
                     Item newItem = new Item(item);
                     copyItems.add(newItem);
                 }
+                // Removing an item from copyItems before performing recursion
                 copyItems.remove(i);
                 copyItems = getOptimalSet(copyItems);
+                // Going through each iteration and storing the best
+                // set from the copyItems Array based on fitness
                 int fitness = getFitness(copyItems);
                 if (fitness > getFitness(bestSet)) {
                     bestSet = copyItems;
                 }
             }
+            // After loop is finished it will check which arraylist has the best fitness
+            // the list that is passed in to the method or the best set found from the loop
             if (getFitness(items) > getFitness(bestSet)) {
                 bestSet = items;
             }
@@ -40,13 +48,12 @@ public class BruteForce {
     public static void main(String[] args) throws Exception {
         ArrayList<Item> items = new ArrayList<>();
         items = readData("items.txt");
-        for (int i = 0; i < items.size(); i++) {
-            System.out.println(items.get(i));
-        }
 
         System.out.println("\nBrute forcing...\n");
+        items = getOptimalSet(items);
+        int fitness = getFitness(items);
 
-        System.out.println(getFitness(getOptimalSet(items)));
+        System.out.println("The best fit chromosome is worth $" + fitness + " and has these items:\n" + items);
 
     }
 
